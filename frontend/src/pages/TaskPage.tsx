@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import type { Task } from "../types/task";
 import { getTasksByIntern } from "../services/taskService";
 import TaskItem from "../components/TaskItem";
+import AddTask from "../components/AddTask";
 
 export default function TasksPage() {
   const { id } = useParams();
@@ -22,13 +23,17 @@ export default function TasksPage() {
   return (
     <div className="p-6">
       <h2 className="text-xl font-bold mb-4">Tasks for Intern #{internId}</h2>
-      {tasks.length === 0 ? (
-        <p>No tasks assigned.</p>
-      ) : (
-        tasks.map((task) => (
-          <TaskItem key={task.id} task={task} onStatusChange={fetchTasks} />
-        ))
-      )}
+
+      <div className="mt-6">
+        {tasks.length === 0 ? (
+          <p>No tasks assigned.</p>
+        ) : (
+          tasks.map((task) => (
+            <TaskItem key={task.id} task={task} onStatusChange={fetchTasks} />
+          ))
+        )}
+        <AddTask internId={internId} />
+      </div>
     </div>
   );
 }

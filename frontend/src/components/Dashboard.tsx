@@ -11,6 +11,7 @@ import {
 const navItems = [
   { label: "Interns", path: "/" },
   { label: "Projects", path: "/projects" },
+  { label: "Tasks", path: "/tasks" },
 ];
 
 export default function DashboardLayout() {

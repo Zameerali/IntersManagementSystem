@@ -3,7 +3,7 @@ import DashboardLayout from "./components/Dashboard";
 import InternListPage from "./pages/InternsListPage";
 import TasksPage from "./pages/TaskPage";
 import ProjectsPage from "./pages/ProjectsPage";
-
+import TasksListPage from "./pages/TasksListPage";
 function App() {
   return (
     <BrowserRouter>
@@ -12,6 +12,7 @@ function App() {
           <Route index element={<InternListPage />} />
           <Route path="interns/:id/tasks" element={<TasksPage />} />
           <Route path="projects" element={<ProjectsPage />} />
+          <Route path="tasks" element={<TasksListPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
