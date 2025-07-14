@@ -11,7 +11,7 @@ exports.addTask = async (req, res) => {
 
 exports.getTasksByIntern = async (req, res) => {
   try {
-    const [rows] = await Task.getTasksByIntern(req.params.id);
+    const rows = await Task.getTasksByIntern(req.params.id);
     res.json(rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
