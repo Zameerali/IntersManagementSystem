@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DashboardLayout from "./components/Dashboard";
 import InternListPage from "./pages/InternsListPage";
 import TasksPage from "./pages/TaskPage";
-// import ProjectsPage from "./pages/ProjectsPage";
+import ProjectsPage from "./pages/ProjectsPage";
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
         <Route path="/" element={<DashboardLayout />}>
           <Route index element={<InternListPage />} />
           <Route path="interns/:id/tasks" element={<TasksPage />} />
-          {/* <Route path="projects" element={<ProjectsPage />} /> */}
+          <Route path="projects" element={<ProjectsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
