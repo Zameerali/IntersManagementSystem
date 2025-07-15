@@ -1,20 +1,67 @@
 import React from "react";
-import { getAllProjects } from "../services/projectService";
-import { Box, Container } from "@mui/material";
+import {
+  getAllProjects,
+  assignProjectToInterns,
+} from "../services/projectService";
+import { getAllInterns } from "../services/internService";
+import {
+  Box,
+  Container,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+} from "@mui/material";
 import type { Project } from "../types/project";
+import type { Intern } from "../types/intern";
+
 export default function ProjectsPage() {
   const [projects, setProjects] = React.useState<Project[]>([]);
+  const [interns, setInterns] = React.useState<Intern[]>([]);
+  const [selectedInterns, setSelectedInterns] = React.useState<{
+    [key: number]: number[];
+  }>({});
+  // Only keep state for assigning one project to many interns
+
   React.useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchProjectsAndInterns = async () => {
       try {
-        const response = await getAllProjects();
-        setProjects(response);
+        const [projectsRes, internsRes] = await Promise.all([
+          getAllProjects(),
+          getAllInterns(),
+        ]);
+        setProjects(projectsRes);
+        setInterns(internsRes);
       } catch (error) {
-        console.error("Failed to fetch projects:", error);
+        console.error("Failed to fetch projects or interns:", error);
       }
     };
-    fetchProjects();
+    fetchProjectsAndInterns();
   }, []);
+
+  // Assign one project to many interns
+  const handleInternSelect = (projectId: number, internId: number) => {
+    setSelectedInterns((prev) => {
+      const current = prev[projectId] || [];
+      return {
+        ...prev,
+        [projectId]: current.includes(internId)
+          ? current.filter((id) => id !== internId)
+          : [...current, internId],
+      };
+    });
+  };
+
+  const handleAssign = async (projectId: number) => {
+    try {
+      await assignProjectToInterns(projectId, selectedInterns[projectId] || []);
+      alert("Project assigned successfully!");
+    } catch (error) {
+      console.error("Failed to assign project:", error);
+      alert("Failed to assign project.");
+    }
+  };
+
   return (
     <Container
       sx={{
@@ -29,6 +76,7 @@ export default function ProjectsPage() {
         backgroundColor: "#fff",
       }}
     >
+      {/* Only show UI for assigning one project to many interns */}
       {projects.map((project) => (
         <Box
           sx={{
@@ -42,6 +90,30 @@ export default function ProjectsPage() {
           key={project.id}
         >
           <h2>Project Name: {project.name}</h2>
+          <h3>Select Interns to Assign:</h3>
+          <FormGroup row>
+            {interns.map((intern) => (
+              <FormControlLabel
+                key={intern.id}
+                control={
+                  <Checkbox
+                    checked={
+                      selectedInterns[project.id]?.includes(intern.id) || false
+                    }
+                    onChange={() => handleInternSelect(project.id, intern.id)}
+                  />
+                }
+                label={intern.name}
+              />
+            ))}
+          </FormGroup>
+          <Button
+            variant="contained"
+            sx={{ mt: 2 }}
+            onClick={() => handleAssign(project.id)}
+          >
+            Assign
+          </Button>
         </Box>
       ))}
     </Container>

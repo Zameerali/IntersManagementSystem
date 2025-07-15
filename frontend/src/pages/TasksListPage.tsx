@@ -32,6 +32,7 @@ const TasksListPage = () => {
     >
       <Box
         sx={{
+          mt: 6,
           width: "100%",
           display: "flex",
           flexDirection: "column",
@@ -79,7 +80,7 @@ const TasksListPage = () => {
               <strong>Status:</strong> {task.status}
             </span>
             <span>
-              <strong>Task Date:</strong> {task.task_date}
+              <strong>Task Date:</strong> {task.task_date.split("T")[0]}
             </span>
           </Box>
         ))}
